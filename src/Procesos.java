@@ -6,6 +6,7 @@ public class Procesos extends Semaforos{
     private int H;
 
     public Procesos() {
+        // Hereda los semaforos A, B, C, D desde la superclase semaforos
         super();
         this.R = 10;
         this.G = 20;
@@ -15,25 +16,33 @@ public class Procesos extends Semaforos{
     }
 
     public void P1() throws InterruptedException {
-        this.A.acquire();//down
-        this.B.acquire();//down
-        this.R = this.T - 5;
-        this.G = this.H - 5;
+        System.out.println("Semaphore A acquired in p1");
+        this.A.acquire(); //down
+        this.A.acquire(); //down
+        this.R = this.G + 5;
+        System.out.println("R: " + this.R);
+        this.G = this.R + 5;
+        System.out.println("G: " + this.G);
+        System.out.println("Semaphore B released in p1");
+        this.B.release();
     }
     public void P11() throws InterruptedException {
-        this.B.release();//up
-        this.T = this.R - 5;
-        this.G = this.H - 5;
-        this.C.acquire();//down
+        System.out.println("Semaphore B acquired in p11");
+        this.B.acquire();//down
+        this.T = this.H - 5;
+        System.out.println("T: " + this.T);
+        System.out.println("Semaphore C released in p11");
+        this.C.release();//up
     }
     public void P12()throws InterruptedException {
-
+        this.A.release();
+        System.out.println("Semaphore A released in p12");
+        System.out.println("Semaphore C acquired in p12");
+        this.C.acquire();
     }
     public void P13() throws InterruptedException{
-
     }
     public void P21() throws InterruptedException{
-
     }
     public void P22() throws InterruptedException{
 

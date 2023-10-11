@@ -1,7 +1,6 @@
 import java.util.concurrent.Semaphore;
 
 public class Semaforos {
-
     public Semaphore A;
     public Semaphore B;
     public Semaphore C;
