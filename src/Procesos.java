@@ -18,14 +18,13 @@ public class Procesos extends Semaforos{
     public void P1() throws InterruptedException {
         System.out.println("Semaphore A acquired in p1");
         this.A.acquire(); //down
-        this.A.acquire();
         this.R = this.G + 5;
         System.out.println("R: " + this.R);
         this.G = this.R + 5;
         System.out.println("G: " + this.G);
         System.out.println("Semaphore B released in p1");
         this.B.release();
-        System.out.println("A\tB\tC\tD\tR\tG\tT\tH"+"\n"+
+        System.out.println("Proceso 1\nA\tB\tC\tD\tR\tG\tT\tH"+"\n"+
         this.A.availablePermits()+"\t"+this.B.availablePermits()+"\t"+this.C.availablePermits()+"\t"+this.D.availablePermits()
         +"\t"+this.R+"\t"+this.G+"\t"+this.T+"\t"+this.H);
     }
@@ -37,19 +36,25 @@ public class Procesos extends Semaforos{
         System.out.println("T: " + this.T);
         System.out.println("Semaphore C released in p11");
         this.C.release();//up
+        System.out.println("Proceso 11\nA\tB\tC\tD\tR\tG\tT\tH"+"\n"+
+                this.A.availablePermits()+"\t"+this.B.availablePermits()+"\t"+this.C.availablePermits()+"\t"+this.D.availablePermits()
+                +"\t"+this.R+"\t"+this.G+"\t"+this.T+"\t"+this.H);
     }
     public void P12()throws InterruptedException {
         this.A.release();
         System.out.println("Semaphore A released in p12");
         System.out.println("Semaphore C acquired in p12");
         this.C.acquire();
+        System.out.println("Proceso 12\nA\tB\tC\tD\tR\tG\tT\tH"+"\n"+
+                this.A.availablePermits()+"\t"+this.B.availablePermits()+"\t"+this.C.availablePermits()+"\t"+this.D.availablePermits()
+                +"\t"+this.R+"\t"+this.G+"\t"+this.T+"\t"+this.H);
     }
     public void P2() throws InterruptedException{
-        System.out.println("Inicia proceso 2");
         this.A.acquire();
-        System.out.println("proceso reiniciado");
         this.T= this.H - this.R;
-        System.out.println("proceso 2 finalizado");
+        System.out.println("Proceso 2\nA\tB\tC\tD\tR\tG\tT\tH"+"\n"+
+                this.A.availablePermits()+"\t"+this.B.availablePermits()+"\t"+this.C.availablePermits()+"\t"+this.D.availablePermits()
+                +"\t"+this.R+"\t"+this.G+"\t"+this.T+"\t"+this.H);
     }
     public void P21() throws InterruptedException{
     }
