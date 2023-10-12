@@ -1,9 +1,16 @@
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class Procesos extends Semaforos{
 
     private int R;
     private int G;
     private int T;
     private int H;
+    private final Lock lock = new ReentrantLock();
+    private final Condition condicionC = lock.newCondition();
+
 
     public Procesos() {
         // Hereda los semaforos A, B, C, D desde la superclase semaforos
@@ -17,45 +24,70 @@ public class Procesos extends Semaforos{
 
     public void P1() throws InterruptedException {
         System.out.println("Semaphore A acquired in p1");
+        System.out.println("Proceso 1\nA\tB\tC\tD\tR\tG\tT\tH"+"\n");
         this.A.acquire(); //down
-        this.R = this.G + 5;
-        System.out.println("R: " + this.R);
-        this.G = this.R + 5;
-        System.out.println("G: " + this.G);
-        System.out.println("Semaphore B released in p1");
-        this.B.release();
-        System.out.println("Proceso 1\nA\tB\tC\tD\tR\tG\tT\tH"+"\n"+
-        this.A.availablePermits()+"\t"+this.B.availablePermits()+"\t"+this.C.availablePermits()+"\t"+this.D.availablePermits()
-        +"\t"+this.R+"\t"+this.G+"\t"+this.T+"\t"+this.H);
+        lock.lock();
+        try {
+            System.out.println(this.A.availablePermits() + "\t" + this.B.availablePermits() + "\t" + this.C.availablePermits() + "\t" + this.D.availablePermits()
+                    + "\t" + this.R + "\t" + this.G + "\t" + this.T + "\t" + this.H);
+            this.R = this.G + 5;
+            System.out.println(this.A.availablePermits() + "\t" + this.B.availablePermits() + "\t" + this.C.availablePermits() + "\t" + this.D.availablePermits()
+                    + "\t" + this.R + "\t" + this.G + "\t" + this.T + "\t" + this.H);
+            this.G = this.R + 5;
+            System.out.println(this.A.availablePermits() + "\t" + this.B.availablePermits() + "\t" + this.C.availablePermits() + "\t" + this.D.availablePermits()
+                    + "\t" + this.R + "\t" + this.G + "\t" + this.T + "\t" + this.H);
+            this.B.release();
+            System.out.println(this.A.availablePermits() + "\t" + this.B.availablePermits() + "\t" + this.C.availablePermits() + "\t" + this.D.availablePermits()
+                    + "\t" + this.R + "\t" + this.G + "\t" + this.T + "\t" + this.H);
+            this.D.release();
+            System.out.println(this.A.availablePermits() + "\t" + this.B.availablePermits() + "\t" + this.C.availablePermits() + "\t" + this.D.availablePermits()
+                    + "\t" + this.R + "\t" + this.G + "\t" + this.T + "\t" + this.H);
+        } finally {
+            lock.unlock();
+        }
     }
     public void P11() throws InterruptedException {
-        System.out.println("Semaphore B acquired in p11");
+
         this.B.acquire();//down
-        System.out.println("dormido");
-        this.T = this.H - 5;
-        System.out.println("T: " + this.T);
-        System.out.println("Semaphore C released in p11");
-        this.C.release();//up
-        System.out.println("Proceso 11\nA\tB\tC\tD\tR\tG\tT\tH"+"\n"+
-                this.A.availablePermits()+"\t"+this.B.availablePermits()+"\t"+this.C.availablePermits()+"\t"+this.D.availablePermits()
-                +"\t"+this.R+"\t"+this.G+"\t"+this.T+"\t"+this.H);
+        lock.lock();
+        try {
+            System.out.println("Semaphore B acquired in p11");
+            System.out.println("Proceso 11\nA\tB\tC\tD\tR\tG\tT\tH" + "\n");
+            System.out.println(this.A.availablePermits() + "\t" + this.B.availablePermits() + "\t" + this.C.availablePermits() + "\t" + this.D.availablePermits()
+                    + "\t" + this.R + "\t" + this.G + "\t" + this.T + "\t" + this.H);
+            this.T = this.H - 5;
+            System.out.println(this.A.availablePermits() + "\t" + this.B.availablePermits() + "\t" + this.C.availablePermits() + "\t" + this.D.availablePermits()
+                    + "\t" + this.R + "\t" + this.G + "\t" + this.T + "\t" + this.H);
+            this.H = this.T + 40;
+            System.out.println(this.A.availablePermits() + "\t" + this.B.availablePermits() + "\t" + this.C.availablePermits() + "\t" + this.D.availablePermits()
+                    + "\t" + this.R + "\t" + this.G + "\t" + this.T + "\t" + this.H);
+            this.R = this.G + 20;
+            System.out.println(this.A.availablePermits() + "\t" + this.B.availablePermits() + "\t" + this.C.availablePermits() + "\t" + this.D.availablePermits()
+                    + "\t" + this.R + "\t" + this.G + "\t" + this.T + "\t" + this.H);
+            this.C.release();//up
+            System.out.println(this.A.availablePermits() + "\t" + this.B.availablePermits() + "\t" + this.C.availablePermits() + "\t" + this.D.availablePermits()
+                    + "\t" + this.R + "\t" + this.G + "\t" + this.T + "\t" + this.H);
+        } finally {
+            lock.unlock();
+        }
     }
-    public void P12()throws InterruptedException {
-        this.A.release();
-        System.out.println("Semaphore A released in p12");
-        System.out.println("Semaphore C acquired in p12");
-        this.C.acquire();
-        System.out.println("Proceso 12\nA\tB\tC\tD\tR\tG\tT\tH"+"\n"+
-                this.A.availablePermits()+"\t"+this.B.availablePermits()+"\t"+this.C.availablePermits()+"\t"+this.D.availablePermits()
-                +"\t"+this.R+"\t"+this.G+"\t"+this.T+"\t"+this.H);
-    }
-    public void P2() throws InterruptedException{
-        this.A.acquire();
-        this.T= this.H - this.R;
-        System.out.println("Proceso 2\nA\tB\tC\tD\tR\tG\tT\tH"+"\n"+
-                this.A.availablePermits()+"\t"+this.B.availablePermits()+"\t"+this.C.availablePermits()+"\t"+this.D.availablePermits()
-                +"\t"+this.R+"\t"+this.G+"\t"+this.T+"\t"+this.H);
-    }
+//    public void P12()throws InterruptedException {
+//        System.out.println("Proceso 12\nA\tB\tC\tD\tR\tG\tT\tH"+"\n"+
+//                this.A.availablePermits()+"\t"+this.B.availablePermits()+"\t"+this.C.availablePermits()+"\t"+this.D.availablePermits()
+//                +"\t"+this.R+"\t"+this.G+"\t"+this.T+"\t"+this.H);
+//        this.A.release();
+//        System.out.println("Semaphore A released in p12");
+//        System.out.println("Semaphore C acquired in p12");
+//        this.C.acquire();
+//    }
+//    public void P2() throws InterruptedException{
+//        System.out.println("Proceso 2\nA\tB\tC\tD\tR\tG\tT\tH"+"\n"+
+//                this.A.availablePermits()+"\t"+this.B.availablePermits()+"\t"+this.C.availablePermits()+"\t"+this.D.availablePermits()
+//                +"\t"+this.R+"\t"+this.G+"\t"+this.T+"\t"+this.H);
+//        this.A.acquire();
+//        this.T= this.H - 60;
+//
+//    }
     public void P21() throws InterruptedException{
     }
     public void P22() throws InterruptedException{
