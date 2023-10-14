@@ -7,6 +7,9 @@ public class Main {
         Thread t1 = new Thread(() -> {
             try {
                 prueba.P1();
+                synchronized (prueba){
+                    prueba.notify();
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -18,22 +21,43 @@ public class Main {
                 e.printStackTrace();
             }
         });
-//
-//        Thread t3 = new Thread(() -> {
-//            try {
-//                prueba.P12();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//        Thread t4 = new Thread(() -> {
-//            try {
-//                prueba.P2();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        });
+
+        Thread t3 = new Thread(() -> {
+            synchronized (prueba){
+                try{
+                    prueba.wait();
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+            try {
+                prueba.P12();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        Thread t4 = new Thread(() -> {
+            synchronized (prueba){
+                try{
+                    prueba.wait();
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+            try {
+                prueba.P2();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
 //        Thread t5 = new Thread(() -> {
+//            synchronized (prueba){
+//                try{
+//                    prueba.wait();
+//                }catch (InterruptedException e){
+//                    e.printStackTrace();
+//                }
+//            }
 //            try {
 //                prueba.P12();
 //            } catch (InterruptedException e) {
@@ -43,14 +67,14 @@ public class Main {
 
         t1.start();
         t2.start();
-      //  t3.start();
-      //  t4.start();
+        t3.start();
+        t4.start();
 
         try {
             t1.join();
             t2.join();
-           // t3.join();
-           // t4.join();
+            t3.join();
+            t4.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
